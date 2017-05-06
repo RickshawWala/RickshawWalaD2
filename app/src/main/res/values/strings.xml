@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">RickshaWala Driver</string>
+    <string name="title_activity_maps">Book Ride</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_profile">Update Details</string>
+    <string name="title_activity_confirm">Confirm Booking</string>
+    <string name="action_more">More</string>
+    <string name="action_next">Next</string>
+    <string name="title_menu_more">Pending</string>
+    <string name="not_regd_click_here">Not Registered? Click here to <u>Register</u>.</string>
+    <string name="regd_login_here">Already Registered? <u>Sign In</u> here!</string>
+</resources>
