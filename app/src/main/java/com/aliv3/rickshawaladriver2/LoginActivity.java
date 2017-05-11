@@ -3,19 +3,27 @@ package com.aliv3.rickshawaladriver2;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -24,9 +32,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText Password;
     private TextView Register;
 
-    private FirebaseAuth firebaseAuth;
     private ProgressDialog ProgressDialog;
-
+    private final OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +42,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         //print to log
         System.out.println("\n\n\n\t\tLOGIN ACTIVITY \n\n\n");
-
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        if(firebaseAuth.getCurrentUser()!=null)
-        {
-            //profile activity here
-            finish();
-            startActivity((new Intent(getApplicationContext(),RideActivity.class)));
-        }
 
         Email = (EditText) findViewById(R.id.editsignemail);
         Password = (EditText) findViewById(R.id.editsignpassword);
@@ -62,41 +60,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String password = Password.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
-            //email is empty
             Toast.makeText(this, "Please Enter your EmailID", Toast.LENGTH_SHORT).show();
-            //stops the function from executing further
             return;
 
         }
         if (TextUtils.isEmpty(password)) {
-            //password is empty
-
             Toast.makeText(this, "Please Enter your Password", Toast.LENGTH_SHORT).show();
-            //stops the function from executing further
             return;
         }
-        //if validations are ok
-        // we will show progress dialog
 
         ProgressDialog.setMessage("Signing In...");
         ProgressDialog.show();
 
-        firebaseAuth.signInWithEmailAndPassword(email,password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task)
-                    {
-                          ProgressDialog.dismiss();
-
-                        if(task.isSuccessful())
-                        {
-                         //start the profile activity
-                            finish();
-                            startActivity((new Intent(getApplicationContext(),RideActivity.class)));
-
-                        }
-                    }
-                });
+        try {
+            postGetToken(email, password, "http://139.59.70.223/api/auth/token");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -104,15 +84,76 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(view == Login){
             userLogin();
-            //Go to map after saving details
-            Intent i = new Intent(LoginActivity.this, RideActivity.class);
-            startActivity(i);
-            finish();
         }
 
         if(view == Register)
         {
             startActivity(new Intent(this,RegisterActivity.class));
         }
+    }
+
+    private void postGetToken(String username, String password, String url) throws IOException, IllegalArgumentException {
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("username", username)
+                .add("password", password)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(LoginActivity.this, "Connection Error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String jsonResponse = response.body().string();
+//                        Log.d("RESPONSE", res);
+                        JSONObject jsonObject;
+                        try {
+                            jsonObject = new JSONObject(jsonResponse);
+                            String error = "", accessToken = "", refreshToken = "";
+                            if(jsonObject.has("error")) {
+                                error = jsonObject.getString("message");
+                            } else if(jsonObject.has("access_token")) {
+                                accessToken = jsonObject.getString("access_token");
+                                refreshToken = jsonObject.getString("refresh_token");
+                            }
+                            uiHandle(error, accessToken, refreshToken);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    private void uiHandle(final String error, final String accessToken, final String refreshToken) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(error != "") {
+                    Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
+                } else if (accessToken != "") {
+                    Toast.makeText(LoginActivity.this, accessToken, Toast.LENGTH_SHORT).show();
+                    
+                    //Go to map after saving details
+                    Intent i = new Intent(LoginActivity.this, RideActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+            }
+        });
     }
 }
