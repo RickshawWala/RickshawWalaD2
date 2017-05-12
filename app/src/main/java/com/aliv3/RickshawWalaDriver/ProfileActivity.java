@@ -1,4 +1,4 @@
-package com.aliv3.rickshawaladriver2;
+package com.aliv3.RickshawWalaDriver;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,9 +33,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        //print to log
-        System.out.println("\n\n\n\t\tPROFILE ACTIVITY \n\n\n");
 
         firebaseAuth = FirebaseAuth.getInstance();
 

@@ -1,18 +1,14 @@
-package com.aliv3.rickshawaladriver2;
+package com.aliv3.RickshawWalaDriver;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.firebase.database.DatabaseReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,17 +33,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText MobileNumber;
     private EditText LicenseNumber;
     private EditText RegistrationNumber;
-    //Database
-    private DatabaseReference databaseReference;
 
-    private ProgressDialog ProgressDialog;
+    private OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        //print to log
-        System.out.println("\n\n\n\t\tREGISTER ACTIVITY \n\n\n");
 
         Register = (Button) findViewById(R.id.buttonregister);
         Email = (EditText) findViewById(R.id.editemail);
@@ -58,11 +50,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         LicenseNumber = (EditText) findViewById(R.id.editlicense);
         RegistrationNumber = (EditText) findViewById(R.id.editvehicle);
 
-        ProgressDialog = new ProgressDialog(this);
-
         Register.setOnClickListener(this);
         Signin.setOnClickListener(this);
-
     }
 
     private void registerUser() {
@@ -117,9 +106,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void postRegister(String name, String email, String mobileNumber, String password, String licenseNumber, String registrationNumber, String url) throws IOException, IllegalArgumentException {
-        OkHttpClient client = new OkHttpClient();
-
+    private void postRegister(String name, final String email, String mobileNumber, final String password, String licenseNumber, String registrationNumber, String url) throws IOException, IllegalArgumentException {
         RequestBody formBody = new FormBody.Builder()
                 .add("name", name)
                 .add("email", email)
@@ -149,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String jsonResponse = response.body().string();
-                        Log.d("RESPONSE", jsonResponse);
+//                        Log.d("RESPONSE", jsonResponse);
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(jsonResponse);
@@ -159,7 +146,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             } else if(jsonObject.has("success")) {
                                 success = jsonObject.getString("success");
                             }
-                            uiHandle(error, success);
+                            uiHandle(error, success, email, password);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -167,7 +154,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 });
     }
 
-    private void uiHandle(final String error, final String success) {
+    private void uiHandle(final String error, final String success, final String email, final String password) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -175,7 +162,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_SHORT).show();
                 } else if (success != "") {
                     Toast.makeText(RegisterActivity.this, success, Toast.LENGTH_SHORT).show();
-                    //Go to driver dash after saving details
+
+                    Helper.setPreference("username", email);
+                    Helper.setPreference("password", password);
+
                     Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(i);
                     finish();
@@ -183,4 +173,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
         });
     }
+
 }

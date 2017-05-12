@@ -3,6 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.aliv3.rickshawaladriver2.ConfirmBookingActivity">
+    tools:context="com.aliv3.RickshawWalaDriver.ConfirmBookingActivity">
 
 </android.support.constraint.ConstraintLayout>

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.aliv3.rickshawaladriver2">
+    package="com.aliv3.RickshawWalaDriver">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".RickshawWalaDriver"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,35 +19,35 @@
             android:value="AIzaSyCCGJT7iVIeGO5LSqTE1klTTBhcI6CSV9Q" />
 
         <activity
-            android:name="com.aliv3.rickshawaladriver2.SplashActivity"
+            android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
         </activity>
 
-        <activity android:name="com.aliv3.rickshawaladriver2.RideActivity"
+        <activity android:name=".RideActivity"
             android:label="@string/title_activity_maps">
         </activity>
 
-        <activity android:name="com.aliv3.rickshawaladriver2.LoginActivity"
+        <activity android:name=".LoginActivity"
             android:label="@string/title_activity_login">
-        </activity>
-
-        <activity android:name="com.aliv3.rickshawaladriver2.RegisterActivity"
-            android:label="@string/title_activity_register">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name="com.aliv3.rickshawaladriver2.ProfileActivity"
+        <activity android:name=".RegisterActivity"
+            android:label="@string/title_activity_register">
+        </activity>
+
+        <activity android:name=".ProfileActivity"
             android:label="@string/title_activity_profile">
         </activity>
 
-        <activity android:name="com.aliv3.rickshawaladriver2.ConfirmBookingActivity"
+        <activity android:name=".ConfirmBookingActivity"
             android:label="@string/title_activity_confirm">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.aliv3.rickshawaladriver2.RideActivity" />
+                android:value=".RideActivity" />
         </activity>
     </application>
 

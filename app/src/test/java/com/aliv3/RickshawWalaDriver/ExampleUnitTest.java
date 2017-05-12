@@ -1,4 +1,4 @@
-package com.aliv3.rickshawaladriver2;
+package com.aliv3.RickshawWalaDriver;
 
 import org.junit.Test;
 

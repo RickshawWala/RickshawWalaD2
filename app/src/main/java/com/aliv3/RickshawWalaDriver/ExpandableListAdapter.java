@@ -1,4 +1,4 @@
-package com.aliv3.rickshawaladriver2;
+package com.aliv3.RickshawWalaDriver;
 
 /**
  * Created by Loel on 06-05-2017.
