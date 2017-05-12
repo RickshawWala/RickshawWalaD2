@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -68,8 +69,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         String email = Email.getText().toString().trim();
         String password = Password.getText().toString().trim();
-        String mobileNumber = Name.getText().toString().trim();
-        String name = MobileNumber.getText().toString().trim();
+        String name = Name.getText().toString().trim();
+        String mobileNumber = MobileNumber.getText().toString().trim();
         String licenseNumber = LicenseNumber.getText().toString().trim();
         String registrationNumber = RegistrationNumber.getText().toString().trim();
 
@@ -148,7 +149,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String jsonResponse = response.body().string();
-//                        Log.d("RESPONSE", jsonResponse);
+                        Log.d("RESPONSE", jsonResponse);
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(jsonResponse);
@@ -174,8 +175,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_SHORT).show();
                 } else if (success != "") {
                     Toast.makeText(RegisterActivity.this, success, Toast.LENGTH_SHORT).show();
-
-                    //Go to map after saving details
+                    //Go to driver dash after saving details
                     Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(i);
                     finish();

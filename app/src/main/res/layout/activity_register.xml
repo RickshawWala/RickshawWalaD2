@@ -63,7 +63,7 @@
             android:layout_marginTop="31dp"
             android:ems="10"
             android:hint="Phone"
-            android:inputType="textNoSuggestions"
+            android:inputType="phone"
             android:layout_alignParentLeft="true" />
         <EditText
             android:id="@+id/editpassword"
