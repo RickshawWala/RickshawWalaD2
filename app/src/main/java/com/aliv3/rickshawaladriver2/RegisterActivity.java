@@ -125,7 +125,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 .add("mobile_number", mobileNumber)
                 .add("password", password)
                 .add("is_driver", "true")
-                .add("is_client", "false")
                 .add("licence_number", licenseNumber)
                 .add("vehicle_registration_number", registrationNumber)
                 .build();
