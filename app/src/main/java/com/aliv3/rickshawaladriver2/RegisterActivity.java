@@ -82,22 +82,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
         if (TextUtils.isEmpty(name)) {
-            Toast.makeText(this, "Please Enter your Password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Enter your Name", Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(mobileNumber)) {
-            Toast.makeText(this, "Please Enter your Password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Enter your Mobile Number", Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(licenseNumber)) {
-            Toast.makeText(this, "Please Enter your Password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Enter your License Number", Toast.LENGTH_SHORT).show();
             return;
         }if (TextUtils.isEmpty(registrationNumber)) {
-            Toast.makeText(this, "Please Enter your Password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Enter your Vehicle Registration Number", Toast.LENGTH_SHORT).show();
             return;
         }
         try {
-            postRegister(name, email, mobileNumber, password, "http://139.59.70.223/api/register");
+            postRegister(name, email, mobileNumber, password, licenseNumber, registrationNumber, "http://139.59.70.223/api/register");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -116,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void postRegister(String name, String email, String mobileNumber, String password, String url) throws IOException, IllegalArgumentException {
+    private void postRegister(String name, String email, String mobileNumber, String password, String licenseNumber, String registrationNumber, String url) throws IOException, IllegalArgumentException {
         OkHttpClient client = new OkHttpClient();
 
         RequestBody formBody = new FormBody.Builder()
@@ -126,8 +126,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 .add("password", password)
                 .add("is_driver", "true")
                 .add("is_client", "false")
-                .add('licence_number', licenseNumber)
-                .add('vehicle_registration_number', registrationNumber)
+                .add("licence_number", licenseNumber)
+                .add("vehicle_registration_number", registrationNumber)
                 .build();
         Request request = new Request.Builder()
                 .url(url)
