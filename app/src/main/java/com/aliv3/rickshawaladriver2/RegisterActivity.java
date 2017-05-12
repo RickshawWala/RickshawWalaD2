@@ -124,8 +124,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 .add("email", email)
                 .add("mobile_number", mobileNumber)
                 .add("password", password)
-                .add("is_driver", Integer.toString(1))
-                .add("is_user", Integer.toString(0))
+                .add("is_driver", "true")
+                .add("is_client", "false")
+                .add('licence_number', licenseNumber)
+                .add('vehicle_registration_number', registrationNumber)
                 .build();
         Request request = new Request.Builder()
                 .url(url)
