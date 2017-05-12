@@ -4,9 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.LoginFilter;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,7 +32,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText Email;
     private EditText Password;
     private TextView Signin;
-
+    private EditText Name;
+    private EditText MobileNumber;
+    private EditText LicenseNumber;
+    private EditText RegistrationNumber;
     //Database
     private DatabaseReference databaseReference;
 
@@ -51,6 +52,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         Email = (EditText) findViewById(R.id.editemail);
         Password = (EditText) findViewById(R.id.editpassword);
         Signin = (TextView) findViewById(R.id.textsignin);
+        Name = (EditText) findViewById(R.id.editname);
+        MobileNumber = (EditText) findViewById(R.id.editmobile);
+        LicenseNumber = (EditText) findViewById(R.id.editlicense);
+        RegistrationNumber = (EditText) findViewById(R.id.editvehicle);
 
         ProgressDialog = new ProgressDialog(this);
 
@@ -63,8 +68,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         String email = Email.getText().toString().trim();
         String password = Password.getText().toString().trim();
-        String mobileNumber = "";
-        String name = "";
+        String mobileNumber = Name.getText().toString().trim();
+        String name = MobileNumber.getText().toString().trim();
+        String licenseNumber = LicenseNumber.getText().toString().trim();
+        String registrationNumber = RegistrationNumber.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(this, "Please Enter your EmailID", Toast.LENGTH_SHORT).show();
@@ -74,7 +81,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(this, "Please Enter your Password", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        if (TextUtils.isEmpty(name)) {
+            Toast.makeText(this, "Please Enter your Password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(mobileNumber)) {
+            Toast.makeText(this, "Please Enter your Password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(licenseNumber)) {
+            Toast.makeText(this, "Please Enter your Password", Toast.LENGTH_SHORT).show();
+            return;
+        }if (TextUtils.isEmpty(registrationNumber)) {
+            Toast.makeText(this, "Please Enter your Password", Toast.LENGTH_SHORT).show();
+            return;
+        }
         try {
             postRegister(name, email, mobileNumber, password, "http://139.59.70.223/api/register");
         } catch (IOException e) {

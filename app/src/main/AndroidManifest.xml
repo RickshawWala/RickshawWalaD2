@@ -20,10 +20,6 @@
         <activity
             android:name="com.aliv3.rickshawaladriver2.SplashActivity"
             android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity android:name="com.aliv3.rickshawaladriver2.RideActivity"
@@ -36,6 +32,10 @@
 
         <activity android:name="com.aliv3.rickshawaladriver2.RegisterActivity"
             android:label="@string/title_activity_register">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name="com.aliv3.rickshawaladriver2.ProfileActivity"
@@ -46,7 +46,7 @@
             android:label="@string/title_activity_confirm">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.aliv3.rickshawaladriver2.MapsActivity" />
+                android:value="com.aliv3.rickshawaladriver2.RideActivity" />
         </activity>
     </application>
 
