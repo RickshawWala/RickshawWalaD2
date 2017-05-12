@@ -136,33 +136,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         if (response.isSuccessful()) {
                             String jsonResponse = response.body().string();
 //                            Log.d("RESPONSE", jsonResponse);
-                            JSONObject jsonObject;
                             try {
-                                jsonObject = new JSONObject(jsonResponse);
-                                if (jsonObject.has("error")) {
-                                    String error = jsonObject.getString("message");
-                                    Log.d("POSTGetAccessToken", error);
-                                } else if (jsonObject.has("access_token")) {
-                                    String accessToken = jsonObject.getString("access_token");
-                                    String refreshToken = jsonObject.getString("refresh_token");
+                                JSONObject jsonObject = new JSONObject(jsonResponse);
+                                String accessToken = jsonObject.getString("access_token");
+                                String refreshToken = jsonObject.getString("refresh_token");
 
-                                    Helper.setPreference("username", username);
-                                    Helper.setPreference("password", password);
-                                    Helper.setPreference("access_token", accessToken);
-                                    Helper.setPreference("refresh_token", refreshToken);
+                                Helper.setPreference("username", username);
+                                Helper.setPreference("password", password);
+                                Helper.setPreference("access_token", accessToken);
+                                Helper.setPreference("refresh_token", refreshToken);
 
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
-                                            completeLogin();
-                                        }
-                                    });
-                                }
-
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
+                                        completeLogin();
+                                    }
+                                });
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+                        } else if(response.code() == 401) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(LoginActivity.this, "Incorrect Username and Password", Toast.LENGTH_SHORT).show();
+                                    ProgressDialog.hide();
+                                }
+                            });
                         } else {
                             runOnUiThread(new Runnable() {
                                 @Override
