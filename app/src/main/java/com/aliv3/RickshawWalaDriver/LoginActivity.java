@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .add("password", password)
                 .build();
         Request request = new Request.Builder()
-                .url("http://139.59.70.223/api/auth/token")
+                .url(Helper.POSTGetNewToken)
                 .post(formBody)
                 .build();
 
