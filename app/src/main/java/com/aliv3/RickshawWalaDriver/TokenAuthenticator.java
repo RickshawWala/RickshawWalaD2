@@ -1,5 +1,7 @@
 package com.aliv3.RickshawWalaDriver;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,10 +31,15 @@ public class TokenAuthenticator implements Authenticator {
 
         String authHeader = response.request().header("Authorization");
 
-        if (authHeader != null && authHeader == "Bearer "+ accessToken) {
+        if (authHeader != null) {
             accessToken = refreshToken();
-            if(accessToken == null) { // if the refresh_token has expired
+//            Log.d("TokenAuthenticator", "refreshToken");
+            if(accessToken == null) {  // refresh token has expired
+//                Log.d("TokenAuthenticator", "getNewToken");
                 accessToken = getNewToken();
+                if(accessToken == null) { // invalid username & password
+                    return null; // give up authentication
+                }
             }
         }
 
@@ -66,13 +73,13 @@ public class TokenAuthenticator implements Authenticator {
             }
             return Helper.getPreference("access_token");
         } else {
-            return null; // refresh token has expired
+            return null; // refresh token has expired - or - the server is down
         }
     }
 
     private String getNewToken() throws IOException {
         String username = Helper.getPreference("username");
-        String password = Helper.getPreference("username");
+        String password = Helper.getPreference("password");
 
         OkHttpClient client = Helper.getOkHttpClientInstance();
 
@@ -86,17 +93,18 @@ public class TokenAuthenticator implements Authenticator {
                 .build();
 
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response); // TODO need to handle api error, can't leave it like this
-
-        String jsonResponse = response.body().string();
-        try {
-            JSONObject jsonObject = new JSONObject(jsonResponse);
-            Helper.setPreference("access_token", jsonObject.getString("access_token"));
-            Helper.setPreference("refresh_token", jsonObject.getString("refresh_token"));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (response.isSuccessful()) {
+            String jsonResponse = response.body().string();
+            try {
+                JSONObject jsonObject = new JSONObject(jsonResponse);
+                Helper.setPreference("access_token", jsonObject.getString("access_token"));
+                Helper.setPreference("refresh_token", jsonObject.getString("refresh_token"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return Helper.getPreference("access_token");
+        } else {
+            return null; // invalid username & password - or - the server is down
         }
-
-        return Helper.getPreference("access_token");
     }
 }
