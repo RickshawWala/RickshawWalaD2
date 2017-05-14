@@ -3,7 +3,6 @@ package com.aliv3.RickshawWalaDriver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,6 +16,7 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import timber.log.Timber;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -52,14 +52,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         return new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("RESPONSE", e.getMessage());
+                Timber.d("RESPONSE", e);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String jsonResponse = response.body().string();
-                    Log.d("RESPONSE", jsonResponse);
+                    Timber.d("RESPONSE", jsonResponse);
                     try {
                         JSONObject jsonObject = new JSONObject(jsonResponse);
                         final String name = jsonObject.getString("name");

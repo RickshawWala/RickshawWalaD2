@@ -12,6 +12,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Route;
+import timber.log.Timber;
 
 public class TokenAuthenticator implements Authenticator {
     /**
@@ -28,9 +29,9 @@ public class TokenAuthenticator implements Authenticator {
 
         if (authHeader != null) {
             accessToken = refreshToken();
-//            Log.d("TokenAuthenticator", "refreshToken");
+            Timber.d("TokenAuthenticator", "refreshToken");
             if(accessToken == null) {  // refresh token has expired
-//                Log.d("TokenAuthenticator", "getNewToken");
+                Timber.d("TokenAuthenticator", "getNewToken");
                 accessToken = getNewToken();
                 if(accessToken == null) { // invalid username & password
                     return null; // give up authentication

@@ -18,6 +18,7 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import timber.log.Timber;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -115,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String jsonResponse = response.body().string();
-//                        Log.d("RESPONSE", jsonResponse);
+                Timber.d("RESPONSE", jsonResponse);
                 JSONObject jsonObject;
                 try {
                     jsonObject = new JSONObject(jsonResponse);

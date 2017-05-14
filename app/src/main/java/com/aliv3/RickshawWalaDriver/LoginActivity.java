@@ -19,6 +19,7 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import timber.log.Timber;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -114,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String jsonResponse = response.body().string();
-//                            Log.d("RESPONSE", jsonResponse);
+                    Timber.d("RESPONSE", jsonResponse);
                     try {
                         JSONObject jsonObject = new JSONObject(jsonResponse);
                         String accessToken = jsonObject.getString("access_token");
