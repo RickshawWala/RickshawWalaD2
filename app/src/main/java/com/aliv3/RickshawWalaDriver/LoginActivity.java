@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else { // to auto login after registration
             if(username != null && password != null) {
                 try {
-                    postGetToken(username, password);
+                    Helper.postGetToken(username, password, callback(username, password));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ProgressDialog.show();
 
         try {
-            postGetToken(email, password);
+            Helper.postGetToken(email, password, callback(email, password));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,75 +100,63 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void postGetToken(final String username, final String password) throws IOException, IllegalArgumentException {
-        OkHttpClient client = Helper.getOkHttpClientInstance();
-
-        RequestBody formBody = new FormBody.Builder()
-                .add("username", username)
-                .add("password", password)
-                .build();
-        Request request = new Request.Builder()
-                .url(Helper.POSTGetNewToken)
-                .post(formBody)
-                .build();
-
-        client.newCall(request)
-                .enqueue(new Callback() {
+    private Callback callback(final String username, final String password) {
+        return new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onFailure(Call call, IOException e) {
+                    public void run() {
+                        Toast.makeText(LoginActivity.this, "Connection Error", Toast.LENGTH_SHORT).show();
+                        ProgressDialog.hide();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String jsonResponse = response.body().string();
+//                            Log.d("RESPONSE", jsonResponse);
+                    try {
+                        JSONObject jsonObject = new JSONObject(jsonResponse);
+                        String accessToken = jsonObject.getString("access_token");
+                        String refreshToken = jsonObject.getString("refresh_token");
+
+                        Helper.setPreference("username", username);
+                        Helper.setPreference("password", password);
+                        Helper.setPreference("access_token", accessToken);
+                        Helper.setPreference("refresh_token", refreshToken);
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(LoginActivity.this, "Connection Error", Toast.LENGTH_SHORT).show();
-                                ProgressDialog.hide();
+                                Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
+                                completeLogin();
                             }
                         });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()) {
-                            String jsonResponse = response.body().string();
-//                            Log.d("RESPONSE", jsonResponse);
-                            try {
-                                JSONObject jsonObject = new JSONObject(jsonResponse);
-                                String accessToken = jsonObject.getString("access_token");
-                                String refreshToken = jsonObject.getString("refresh_token");
-
-                                Helper.setPreference("username", username);
-                                Helper.setPreference("password", password);
-                                Helper.setPreference("access_token", accessToken);
-                                Helper.setPreference("refresh_token", refreshToken);
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
-                                        completeLogin();
-                                    }
-                                });
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        } else if(response.code() == 401) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(LoginActivity.this, "Incorrect Username and Password", Toast.LENGTH_SHORT).show();
-                                    ProgressDialog.hide();
-                                }
-                            });
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(LoginActivity.this, "Internal Server Error", Toast.LENGTH_SHORT).show();
-                                    ProgressDialog.hide();
-                                }
-                            });
+                } else if(response.code() == 401) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginActivity.this, "Incorrect Username and Password", Toast.LENGTH_SHORT).show();
+                            ProgressDialog.hide();
                         }
-                    }
-                });
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginActivity.this, "Internal Server Error", Toast.LENGTH_SHORT).show();
+                            ProgressDialog.hide();
+                        }
+                    });
+                }
+            }
+        };
     }
     private void completeLogin() {
         Intent i = new Intent(LoginActivity.this, RideActivity.class);
