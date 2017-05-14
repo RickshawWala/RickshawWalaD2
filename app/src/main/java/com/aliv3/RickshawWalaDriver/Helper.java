@@ -16,16 +16,14 @@ public class Helper {
     public static String POSTRegister = host + "/api/register";
 
     public static SharedPreferences getSharedPreferencesInstance() {
-        if(mInstance == null)
-        {
+        if(mInstance == null) {
             mInstance = PreferenceManager.getDefaultSharedPreferences(RickshawWalaDriver.getAppContext());
         }
         return mInstance;
     }
 
     public static OkHttpClient getOkHttpClientInstance() {
-        if(mInstance2 == null)
-        {
+        if(mInstance2 == null) {
             mInstance2 = new OkHttpClient();
         }
         return mInstance2;

@@ -1,12 +1,10 @@
 package com.aliv3.RickshawWalaDriver;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +36,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
         String accessToken = Helper.getPreference("access_token");
         String username = Helper.getPreference("username");
@@ -55,13 +54,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
 
-        setContentView(R.layout.activity_login);
-
         Email = (EditText) findViewById(R.id.editsignemail);
         Password = (EditText) findViewById(R.id.editsignpassword);
         Login = (Button) findViewById(R.id.buttonlogin);
         Register = (TextView) findViewById(R.id.textregister);
-
         ProgressDialog = new ProgressDialog(this);
 
         Login.setOnClickListener(this);
@@ -99,9 +95,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(view == Login){
             userLogin();
         }
-
-        if(view == Register)
-        {
+        if(view == Register) {
             startActivity(new Intent(this,RegisterActivity.class));
         }
     }
@@ -176,11 +170,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
     }
-
     private void completeLogin() {
         Intent i = new Intent(LoginActivity.this, RideActivity.class);
         startActivity(i);
         finish();
     }
-
 }

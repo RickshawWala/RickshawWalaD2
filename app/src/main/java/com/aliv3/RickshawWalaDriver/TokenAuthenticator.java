@@ -1,7 +1,5 @@
 package com.aliv3.RickshawWalaDriver;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,15 +14,12 @@ import okhttp3.Response;
 import okhttp3.Route;
 
 public class TokenAuthenticator implements Authenticator {
-
-
     /**
      * This class handles three cases to authenticate
      * 1. use the access_token in the preference
      * 2. if access_token in the preference has expired use refresh_token from the preference
      * 3. if refresh_token in the preference has also expired, get new tokens using the username & password
      */
-
     @Override
     public Request authenticate(Route route, Response response) throws IOException {
         String accessToken = Helper.getPreference("access_token");
