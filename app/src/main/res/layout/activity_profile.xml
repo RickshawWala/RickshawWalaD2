@@ -17,82 +17,64 @@
         android:layout_centerVertical="true"
         android:layout_marginTop="30dp"
         android:orientation="vertical">
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="62dp"
+            android:text="Driver Name"
+            android:layout_margin="20dp"/>
 
         <TextView
-            android:id="@+id/textViewprofile"
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Driver Details"
-            android:layout_margin="40dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textAlignment="center"/>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/name"
+            android:text="Driver Email"
+            android:layout_margin="20dp"/>
 
-        <EditText
-            android:id="@+id/editname"
-            android:layout_margin="15dp"
+        <TextView
+            android:id="@+id/mobileNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="141dp"
-            android:ems="10"
-            android:hint="Full Name"
-            android:inputType="text" />
+            android:text="Driver Phone No."
+            android:layout_above="@+id/email"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="20dp"/>
 
-        <EditText
-            android:id="@+id/editphone"
-            android:layout_margin="15dp"
+        <TextView
+            android:id="@+id/licenseNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="141dp"
-            android:ems="10"
-            android:hint="Phone"
-            android:inputType="phone" />
-
-        <EditText
-            android:id="@+id/editlicense"
-            android:layout_margin="15dp"
+            android:text="License Number"
+            android:layout_below="@+id/mobileNumber"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="20dp"/>
+        <TextView
+            android:id="@+id/registrationNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="141dp"
-            android:ems="10"
-            android:hint="License Number"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/editvehicle"
-            android:layout_margin="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="141dp"
-            android:ems="10"
-            android:hint="Vehicle Number"
-            android:inputType="text" />
-
-        <Button
-            android:id="@+id/buttonSaveinfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save Details"
-            android:background="@color/colorPrimary"
-            android:layout_marginTop="10dp"
-            />
+            android:text="Registration Number"
+            android:layout_below="@+id/licenseNumber"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="20dp"/>
 
         <Button
             android:id="@+id/buttonlogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
-            android:text="Logout"
-            android:layout_marginTop="10dp"
-            />
+            android:text="Logout" />
     </LinearLayout>
 
     </ScrollView>
