@@ -87,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
         try {
-            postRegister(name, email, mobileNumber, password, licenseNumber, registrationNumber, "http://139.59.70.223/api/register");
+            postRegister(name, email, mobileNumber, password, licenseNumber, registrationNumber);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -106,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void postRegister(String name, final String email, String mobileNumber, final String password, String licenseNumber, String registrationNumber, String url) throws IOException, IllegalArgumentException {
+    private void postRegister(String name, final String email, String mobileNumber, final String password, String licenseNumber, String registrationNumber) throws IOException, IllegalArgumentException {
         RequestBody formBody = new FormBody.Builder()
                 .add("name", name)
                 .add("email", email)
@@ -117,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 .add("vehicle_registration_number", registrationNumber)
                 .build();
         Request request = new Request.Builder()
-                .url(url)
+                .url(Helper.POSTRegister)
                 .post(formBody)
                 .build();
 

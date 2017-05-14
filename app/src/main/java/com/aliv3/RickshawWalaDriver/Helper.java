@@ -10,6 +10,11 @@ public class Helper {
     private static SharedPreferences mInstance = null;
     private static OkHttpClient mInstance2 = null;
 
+    private static String host = "http://139.59.70.223";
+    public static String POSTGetNewToken = host + "/api/auth/token";
+    public static String POSTRefreshToken = host + "/api/auth/refresh";
+    public static String POSTRegister = host + "/api/register";
+
     public static SharedPreferences getSharedPreferencesInstance() {
         if(mInstance == null)
         {
