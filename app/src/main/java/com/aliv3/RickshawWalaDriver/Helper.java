@@ -23,7 +23,7 @@ public class Helper {
     private static String POSTRegister = api + "/register";
     private static String GETUser = api + "/user";
 
-    public static SharedPreferences getSharedPreferencesInstance() {
+    private static SharedPreferences getSharedPreferencesInstance() {
         if(mInstance == null) {
             mInstance = PreferenceManager.getDefaultSharedPreferences(RickshawWalaDriver.getAppContext());
         }
@@ -42,11 +42,35 @@ public class Helper {
         editor.putString(key, value);
         editor.apply();
     }
+
     public static String getPreference(String key) {
         return getSharedPreferencesInstance().getString(key, null);
     }
 
-    public static void postRegister(String name, final String email, String mobileNumber, final String password, String licenseNumber, String registrationNumber, Callback callback) throws IOException, IllegalArgumentException {
+    public static void clearAllPreferences() {
+        getSharedPreferencesInstance().edit().clear().commit();
+    }
+
+    public static void postRegisterUser(String name, final String email, String mobileNumber, final String password, Callback callback) throws IOException, IllegalArgumentException {
+        OkHttpClient client = Helper.getOkHttpClientInstance().newBuilder().authenticator(new TokenAuthenticator()).build();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("name", name)
+                .add("email", email)
+                .add("mobile_number", mobileNumber)
+                .add("password", password)
+                .add("is_client", "true")
+                .build();
+        Request request = new Request.Builder()
+                .url(Helper.POSTRegister)
+                .post(formBody)
+                .build();
+
+        client.newCall(request)
+                .enqueue(callback);
+    }
+
+    public static void postRegisterDriver(String name, final String email, String mobileNumber, final String password, String licenseNumber, String registrationNumber, Callback callback) throws IOException, IllegalArgumentException {
         OkHttpClient client = Helper.getOkHttpClientInstance().newBuilder().authenticator(new TokenAuthenticator()).build();
 
         RequestBody formBody = new FormBody.Builder()

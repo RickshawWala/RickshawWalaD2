@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
         try {
-            Helper.postRegister(name, email, mobileNumber, password, licenseNumber, registrationNumber, callback(email, password));
+            Helper.postRegisterDriver(name, email, mobileNumber, password, licenseNumber, registrationNumber, callback(email, password));
         } catch (IOException e) {
             e.printStackTrace();
         }
