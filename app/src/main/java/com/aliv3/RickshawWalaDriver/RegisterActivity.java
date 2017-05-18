@@ -2,6 +2,7 @@ package com.aliv3.RickshawWalaDriver;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -24,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private Button Register;
     private EditText Email;
-    private EditText Password;
+    private TextInputLayout Password;
     private TextView Signin;
     private EditText Name;
     private EditText MobileNumber;
@@ -38,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         Register = (Button) findViewById(R.id.buttonregister);
         Email = (EditText) findViewById(R.id.editemail);
-        Password = (EditText) findViewById(R.id.editpassword);
+        Password = (TextInputLayout) findViewById(R.id.editpassword);
         Signin = (TextView) findViewById(R.id.textsignin);
         Name = (EditText) findViewById(R.id.editname);
         MobileNumber = (EditText) findViewById(R.id.editmobile);
@@ -52,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void registerUser() {
 
         String email = Email.getText().toString().trim();
-        String password = Password.getText().toString().trim();
+        String password = Password.getEditText().getText().toString().trim();
         String name = Name.getText().toString().trim();
         String mobileNumber = MobileNumber.getText().toString().trim();
         String licenseNumber = LicenseNumber.getText().toString().trim();

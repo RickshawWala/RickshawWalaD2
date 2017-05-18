@@ -30,7 +30,7 @@ public class SplashActivity extends Activity {
             public void onAnimationEnd(Animation animation) {
                 imageSplash.startAnimation(animSplash2);
                 finish();
-                Intent i = new Intent(getBaseContext(),RegisterActivity.class);
+                Intent i = new Intent(getBaseContext(),LoginActivity.class);
                 startActivity(i);
             }
 

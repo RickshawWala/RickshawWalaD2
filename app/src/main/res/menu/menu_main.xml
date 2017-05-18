@@ -7,15 +7,12 @@
         android:id="@+id/myprofile"
         android:orderInCategory="1"
         android:title="My Profile"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/ratecard"
-        android:orderInCategory="2"
-        android:title="Rate Card"
-        app:showAsAction="never" />
+        android:icon="@drawable/user_profile"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/settings"
-        android:orderInCategory="3"
+        android:orderInCategory="2"
         android:title="Settings"
         app:showAsAction="never" />
 </menu>

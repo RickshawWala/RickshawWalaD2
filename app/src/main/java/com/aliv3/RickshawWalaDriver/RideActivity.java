@@ -20,7 +20,6 @@ import java.util.List;
 
 public class RideActivity extends AppCompatActivity {
 
-    private final int LOCATION_REQUEST_CODE = 2; //Can be any value, non zero
     boolean doubleBackToExitPressedOnce = false;
 
     ExpandableListAdapter listAdapter;
@@ -32,8 +31,6 @@ public class RideActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride);
-
-        askPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
 
         // get the listview
         expListView = (ExpandableListView) findViewById(R.id.rideListView);
@@ -59,13 +56,25 @@ public class RideActivity extends AppCompatActivity {
             }
         });
 
-        Button btnBookRide = (Button) findViewById(R.id.buttonAcceptRide);
-        btnBookRide.setOnClickListener(new View.OnClickListener() {
+        Button buttonAcceptRide = (Button) findViewById(R.id.buttonAccept);
+        buttonAcceptRide.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                Intent iConfirmBookingActivity = new Intent(getBaseContext(), ConfirmBookingActivity.class);
-                startActivity(iConfirmBookingActivity);
+                //Toast.makeText(getBaseContext(), "Accept request", Toast.LENGTH_SHORT).show();
+                ConfirmRideFragment fragmentOperationConfirmRide = new ConfirmRideFragment();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, fragmentOperationConfirmRide);
+                fragmentTransaction.commit();
+            }
+        });
+
+        Button buttonRejectRide = (Button) findViewById(R.id.buttonReject);
+        buttonRejectRide.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick (View view) {
+                Toast.makeText(getBaseContext(), "Send reject to user", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -86,7 +95,7 @@ public class RideActivity extends AppCompatActivity {
         if(ContextCompat.checkSelfPermission(this, permission)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
         } else {
-            Toast.makeText(this, "Permission is already granted", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Permission is already granted", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -103,8 +112,6 @@ public class RideActivity extends AppCompatActivity {
         switch(id) {
             case R.id.myprofile:
                 startActivity(new Intent(this, ProfileActivity.class));
-                return true;
-            case R.id.ratecard:
                 return true;
             case R.id.settings:
                 return true;

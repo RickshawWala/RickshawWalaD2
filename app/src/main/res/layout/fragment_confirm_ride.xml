@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:id="@+id/fragment_confirm_ride"
+    tools:context="com.aliv3.RickshawWalaDriver.ConfirmRideFragment">
+
+    <TextView
+        android:id="@+id/textOriginIs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Customer's location is:"
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="67dp" />
+    <TextView
+        android:id="@+id/textGetOrigin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="getOrigin"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/textOriginIs"
+        android:layout_marginTop="32dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <TextView
+        android:id="@+id/textDestIs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Customer's destination is:"
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/textGetOrigin" />
+    <TextView
+        android:id="@+id/textGetDest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="getDestination"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/textDestIs" />
+    <TextView
+        android:id="@+id/textEstFare"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estimated fare is:"
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/textGetDest" />
+    <TextView
+        android:id="@+id/textGetEstFare"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="getEstFare"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/textEstFare" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Ride"
+        android:id="@+id/buttonStartRide"
+        android:textColor="#FFFFFF"
+        android:background="#BC5127"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="60dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="53dp" />
+
+</RelativeLayout>

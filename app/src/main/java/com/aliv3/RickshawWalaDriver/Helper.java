@@ -59,7 +59,7 @@ public class Helper {
                 .add("email", email)
                 .add("mobile_number", mobileNumber)
                 .add("password", password)
-                .add("is_client", "true")
+                .add("is_driver", "true")
                 .build();
         Request request = new Request.Builder()
                 .url(Helper.POSTRegister)

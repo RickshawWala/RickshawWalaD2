@@ -2,7 +2,10 @@ package com.aliv3.RickshawWalaDriver;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -23,6 +26,8 @@ import timber.log.Timber;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private final int LOCATION_REQUEST_CODE = 2; //Can be any value, non zero
+
     private Button Login;
     private EditText Email;
     private EditText Password;
@@ -33,6 +38,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        askPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
 
         String accessToken = Helper.getPreference("access_token");
         String username = Helper.getPreference("username");
@@ -161,4 +168,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         startActivity(i);
         finish();
     }
+
+    private void askPermission (String permission, int requestCode) {
+        if(ContextCompat.checkSelfPermission(this, permission)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
+        } else {
+            //Toast.makeText(this, "Permission is already granted", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

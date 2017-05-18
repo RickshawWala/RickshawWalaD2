@@ -12,7 +12,7 @@
         android:id="@+id/imageViewSplash"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/splash_rick"
+        android:src="@drawable/splash_rickshawala"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
