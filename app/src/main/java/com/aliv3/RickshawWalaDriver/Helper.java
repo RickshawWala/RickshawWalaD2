@@ -59,7 +59,7 @@ public class Helper {
                 .add("email", email)
                 .add("mobile_number", mobileNumber)
                 .add("password", password)
-                .add("is_driver", "true")
+                .add("is_user", "true")
                 .build();
         Request request = new Request.Builder()
                 .url(Helper.POSTRegister)
@@ -91,12 +91,13 @@ public class Helper {
                 .enqueue(callback);
     }
 
-    public static void postGetToken(final String username, final String password, Callback callback) throws IOException, IllegalArgumentException {
+    public static void postGetToken(final String username, final String password, final String isType, Callback callback) throws IOException, IllegalArgumentException {
         OkHttpClient client = Helper.getOkHttpClientInstance();
 
         RequestBody formBody = new FormBody.Builder()
                 .add("username", username)
                 .add("password", password)
+                .add(isType, "true")
                 .build();
         Request request = new Request.Builder()
                 .url(POSTGetNewToken)

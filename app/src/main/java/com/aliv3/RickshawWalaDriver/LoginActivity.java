@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else { // to auto login after registration
             if(username != null && password != null) {
                 try {
-                    Helper.postGetToken(username, password, callback(username, password));
+                    Helper.postGetToken(username, password, "is_driver", callback(username, password));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ProgressDialog.show();
 
         try {
-            Helper.postGetToken(email, password, callback(email, password));
+            Helper.postGetToken(email, password, "is_driver", callback(email, password));
         } catch (IOException e) {
             e.printStackTrace();
         }
