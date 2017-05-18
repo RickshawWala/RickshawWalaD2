@@ -1,10 +1,9 @@
 <resources>
     <string name="app_name">RickshawWala Driver</string>
-    <string name="title_activity_ride">RickshaWala</string>
+    <string name="title_activity_ride">RickshaWala Driver</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_register">Register</string>
-    <string name="title_activity_profile">Update Details</string>
-    <string name="title_activity_confirm">Confirm Booking</string>
+    <string name="title_activity_profile">My Profile</string>
     <string name="action_more">More</string>
     <string name="action_next">Next</string>
     <string name="title_menu_more">Pending</string>

@@ -15,8 +15,16 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="30dp"
         android:orientation="vertical">
+        <TextView
+            android:id="@+id/namePrompt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:text="Name"
+            android:layout_margin="10dp"/>
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
@@ -25,46 +33,88 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="62dp"
             android:text="Driver Name"
-            android:layout_margin="20dp"/>
-
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:layout_below="@+id/namePrompt"/>
+        <TextView
+            android:id="@+id/emailPrompt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/name"
+            android:text="Email"
+            android:layout_margin="10dp"/>
         <TextView
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/name"
+            android:layout_below="@+id/emailPrompt"
             android:text="Driver Email"
-            android:layout_margin="20dp"/>
+            android:gravity="center"
+            android:layout_margin="10dp"/>
 
         <TextView
-            android:id="@+id/mobileNumber"
+            android:id="@+id/mobileNumberPrompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Driver Phone No."
             android:layout_above="@+id/email"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_margin="20dp"/>
+            android:layout_margin="10dp"/>
+        <TextView
+            android:id="@+id/mobileNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Driver Phone No."
+            android:gravity="center"
+            android:layout_above="@+id/mobileNumberPrompt"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="10dp"/>
 
         <TextView
-            android:id="@+id/licenseNumber"
+            android:id="@+id/licenseNumberPrompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="License Number"
             android:layout_below="@+id/mobileNumber"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_margin="20dp"/>
+            android:layout_margin="10dp"/>
         <TextView
-            android:id="@+id/registrationNumber"
+            android:id="@+id/licenseNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="License Number"
+            android:gravity="center"
+            android:layout_below="@+id/mobileNumber"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:id="@+id/registrationNumberPrompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Registration Number"
             android:layout_below="@+id/licenseNumber"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_margin="20dp"/>
+            android:layout_margin="10dp"/>
+        <TextView
+            android:id="@+id/registrationNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Registration Number"
+            android:gravity="center"
+            android:layout_below="@+id/registrationNumberPrompt"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="10dp"/>
 
         <Button
             android:id="@+id/buttonlogout"
@@ -74,7 +124,8 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
-            android:text="Logout" />
+            android:text="Logout"
+            android:layout_marginTop="20dp"/>
     </LinearLayout>
 
     </ScrollView>

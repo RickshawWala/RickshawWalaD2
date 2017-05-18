@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private Button Login;
     private EditText Email;
-    private EditText Password;
+    private TextInputLayout Password;
     private TextView Register;
 
     private ProgressDialog ProgressDialog;
@@ -38,8 +39,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        askPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
 
         String accessToken = Helper.getPreference("access_token");
         String username = Helper.getPreference("username");
@@ -59,8 +58,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         setContentView(R.layout.activity_login);
 
+        askPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
+
         Email = (EditText) findViewById(R.id.editsignemail);
-        Password = (EditText) findViewById(R.id.editsignpassword);
+        Password = (TextInputLayout) findViewById(R.id.editsignpassword);
         Login = (Button) findViewById(R.id.buttonlogin);
         Register = (TextView) findViewById(R.id.textregister);
         ProgressDialog = new ProgressDialog(this);
@@ -72,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void userLogin()
     {
         String email = Email.getText().toString().trim();
-        String password = Password.getText().toString().trim();
+        String password = Password.getEditText().getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(this, "Please Enter your EmailID", Toast.LENGTH_SHORT).show();

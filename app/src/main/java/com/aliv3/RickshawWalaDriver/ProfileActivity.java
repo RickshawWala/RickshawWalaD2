@@ -32,6 +32,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Name = (TextView) findViewById(R.id.name);
         Email = (TextView) findViewById(R.id.email);
         MobileNumber = (TextView) findViewById(R.id.mobileNumber);
