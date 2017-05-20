@@ -1,5 +1,6 @@
 package com.aliv3.RickshawWalaDriver;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -31,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText MobileNumber;
     private EditText LicenseNumber;
     private EditText RegistrationNumber;
+    private ProgressDialog ProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         MobileNumber = (EditText) findViewById(R.id.editmobile);
         LicenseNumber = (EditText) findViewById(R.id.editlicense);
         RegistrationNumber = (EditText) findViewById(R.id.editvehicle);
+
+        ProgressDialog = new ProgressDialog(this);
 
         Register.setOnClickListener(this);
         Signin.setOnClickListener(this);
@@ -82,6 +86,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(this, "Please Enter your Vehicle Registration Number", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        ProgressDialog.setMessage("Registering...");
+        ProgressDialog.show();
+
         try {
             Helper.postRegisterDriver(name, email, mobileNumber, password, licenseNumber, registrationNumber, callback(email, password));
         } catch (IOException e) {

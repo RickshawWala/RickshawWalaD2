@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -22,6 +23,10 @@ public class Helper {
     public static String POSTRefreshToken = api + "/auth/refresh";
     private static String POSTRegister = api + "/register";
     private static String GETUser = api + "/user";
+    private static String GETCreatedRides = api + "/created-rides";
+    private static String POSTRideCreate = api + "/ride/create";
+    private static String POSTRideUpdate = api + "/ride/update";
+    private static String GETRideStatus = api + "/ride/status";
 
     private static SharedPreferences getSharedPreferencesInstance() {
         if(mInstance == null) {
@@ -59,7 +64,7 @@ public class Helper {
                 .add("email", email)
                 .add("mobile_number", mobileNumber)
                 .add("password", password)
-                .add("is_user", "true")
+                .add("is_client", "true")
                 .build();
         Request request = new Request.Builder()
                 .url(Helper.POSTRegister)
@@ -114,6 +119,88 @@ public class Helper {
         Request request = new Request.Builder()
                 .url(GETUser)
                 .addHeader("Accept", "application/json")
+                .get()
+                .build();
+
+        client.newCall(request)
+                .enqueue(callback);
+    }
+
+    public static void postRideCreate(final String originLatitude, final String originLongitude, final String destinationLatitude, final String destinationLongitude, Callback callback) throws IOException, IllegalArgumentException {
+        OkHttpClient client = Helper.getOkHttpClientInstance().newBuilder().authenticator(new TokenAuthenticator()).build();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("origin_latitude", originLatitude)
+                .add("origin_longitude", originLongitude)
+                .add("destination_latitude", destinationLatitude)
+                .add("destination_longitude", destinationLongitude)
+                .build();
+        Request request = new Request.Builder()
+                .url(POSTRideCreate)
+                .addHeader("Accept", "application/json")
+                .post(formBody)
+                .build();
+
+        client.newCall(request)
+                .enqueue(callback);
+    }
+
+    public static void getCreatedRides(Callback callback) throws IOException, IllegalArgumentException {
+        OkHttpClient client = Helper.getOkHttpClientInstance().newBuilder().authenticator(new TokenAuthenticator()).build();
+
+        Request request = new Request.Builder()
+                .url(GETCreatedRides)
+                .addHeader("Accept", "application/json")
+                .get()
+                .build();
+
+        client.newCall(request)
+                .enqueue(callback);
+    }
+
+    public static void postRideUpdate(final String id, final String status, Callback callback) throws IOException, IllegalArgumentException {
+        OkHttpClient client = Helper.getOkHttpClientInstance().newBuilder().authenticator(new TokenAuthenticator()).build();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("id", id)
+                .add("status", status)
+                .build();
+        Request request = new Request.Builder()
+                .url(POSTRideUpdate)
+                .addHeader("Accept", "application/json")
+                .post(formBody)
+                .build();
+
+        client.newCall(request)
+                .enqueue(callback);
+    }
+
+    public static void getRideStatus(Callback callback) throws IOException, IllegalArgumentException {
+        OkHttpClient client = Helper.getOkHttpClientInstance().newBuilder().authenticator(new TokenAuthenticator()).build();
+
+        Request request = new Request.Builder()
+                .url(GETRideStatus)
+                .addHeader("Accept", "application/json")
+                .get()
+                .build();
+
+        client.newCall(request)
+                .enqueue(callback);
+    }
+
+    public static void getLatLongFromPlaceId(final String placeName, Callback callback) throws IOException, IllegalArgumentException {
+        OkHttpClient client = Helper.getOkHttpClientInstance();
+
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("https")
+                .host("maps.googleapis.com")
+                .addPathSegments("maps/api/geocode/json")
+                .addQueryParameter("address", placeName)
+                .addQueryParameter("key", "AIzaSyCCGJT7iVIeGO5LSqTE1klTTBhcI6CSV9Q")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
                 .get()
                 .build();
 

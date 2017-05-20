@@ -1,102 +1,109 @@
 package com.aliv3.RickshawWalaDriver;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class RideActivity extends AppCompatActivity {
 
     boolean doubleBackToExitPressedOnce = false;
-
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
+    RideListAdapter adapter;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride);
 
-        // get the listview
-        expListView = (ExpandableListView) findViewById(R.id.rideListView);
+        ArrayList<Ride> arrayOfRides = new ArrayList<Ride>();
+        adapter = new RideListAdapter(this, arrayOfRides);
+        listView = (ListView) findViewById(R.id.rideListView);
+        listView.setAdapter(adapter);
 
-        // preparing list data
-        prepareListData();
-
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
-
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
-
-        // Listview Group click listener
-        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
+        new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
-            public boolean onGroupClick(ExpandableListView parent, View v,
-                                        int groupPosition, long id) {
-                // Toast.makeText(getApplicationContext(),
-                // "Group Clicked " + listDataHeader.get(groupPosition),
-                // Toast.LENGTH_SHORT).show();
-                return false;
+            public void run() {
+                //Log.d("Timer", "3, 2, 1");
+                try {
+                    Helper.getCreatedRides(callback());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        }, 0, 10*1000);
+    }
 
-        Button buttonAcceptRide = (Button) findViewById(R.id.buttonAccept);
-        buttonAcceptRide.setOnClickListener(new View.OnClickListener() {
-
+    private Callback callback() {
+        return new Callback() {
             @Override
-            public void onClick(View view) {
-                //Toast.makeText(getBaseContext(), "Accept request", Toast.LENGTH_SHORT).show();
-                ConfirmRideFragment fragmentOperationConfirmRide = new ConfirmRideFragment();
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frame_main, fragmentOperationConfirmRide);
-                fragmentTransaction.commit();
+            public void onFailure(Call call, IOException e) {
+                Log.d("RideActivity", e.getMessage());
             }
-        });
-
-        Button buttonRejectRide = (Button) findViewById(R.id.buttonReject);
-        buttonRejectRide.setOnClickListener(new View.OnClickListener(){
 
             @Override
-            public void onClick (View view) {
-                Toast.makeText(getBaseContext(), "Send reject to user", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String jsonResponse = response.body().string();
+                    Log.d("JSON", jsonResponse);
+                    clearAdapter();
+                    try {
+                        final JSONArray jsonArray = new JSONArray(jsonResponse);
+                        for(int i = 0; i < jsonArray.length(); i++) {
+                            Integer id = jsonArray.getJSONObject(i).getInt("id");
+                            double origLat = jsonArray.getJSONObject(i).getDouble("origin_latitude");
+                            double origLong = jsonArray.getJSONObject(i).getDouble("origin_longitude");
+                            double destLat = jsonArray.getJSONObject(i).getDouble("destination_latitude");
+                            double destLong = jsonArray.getJSONObject(i).getDouble("destination_longitude");
+                            double fare = jsonArray.getJSONObject(i).getDouble("fare");
+                            String clientName = jsonArray.getJSONObject(i).getJSONObject("client").getString("name");
+                            Ride newRide = new Ride(id, clientName, origLat, origLong, destLat, destLong, fare);
+                            addRide(newRide);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Log.d("RideActivity", "Failed to get the created rides from the api");
+                }
+            }
+        };
+    }
+
+    private void clearAdapter() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.clear();
             }
         });
     }
 
-    private void prepareListData() {
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
-
-        listDataHeader.add("Text for new ride request");
-        List<String> event_1 = new ArrayList<String>();
-
-        // Adding child data
-        event_1.add("Ride request details");
-        listDataChild.put(listDataHeader.get(0), event_1); // Header, Child data
-    }
-
-    private void askPermission (String permission, int requestCode) {
-        if(ContextCompat.checkSelfPermission(this, permission)!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
-        } else {
-            //Toast.makeText(this, "Permission is already granted", Toast.LENGTH_SHORT).show();
-        }
+    private void addRide(final Ride newRide) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.add(newRide);
+            }
+        });
     }
 
     @Override
@@ -124,7 +131,7 @@ public class RideActivity extends AppCompatActivity {
 
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
-            return;
+            finish();
         }
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Press BACK again to exit", Toast.LENGTH_SHORT).show();

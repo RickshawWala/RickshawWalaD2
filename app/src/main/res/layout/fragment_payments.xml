@@ -9,8 +9,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textPayBy"
-        android:text="Received Payment by:"
+        android:id="@+id/textFareIs"
+        android:text="The Ride fare is:"
+        android:textSize="20sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/getFareIs"
+        android:text="getFare"
+        android:textSize="30sp"
+        android:layout_below="@+id/textFareIs"
         android:gravity="center_horizontal"
         android:layout_marginTop="20dp"/>
 
@@ -20,21 +30,13 @@
         android:id="@+id/buttonCash"
         android:src="@drawable/payment_cash"
         android:background="#00FFFFFF"
-        android:layout_below="@+id/textPayBy"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
+        android:clickable="false"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textOr"
-        android:text="OR"
-        android:layout_below="@+id/buttonCash"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"/>
 
-    <ImageButton
+
+    <!--<ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonPaytm"
@@ -42,13 +44,13 @@
         android:background="#00FFFFFF"
         android:layout_below="@+id/textOr"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"/>-->
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonGoHome"
-        android:text="New Ride"
+        android:id="@+id/buttonConfirmPayment"
+        android:text="Confirm Payment"
         android:textColor="#ffffff"
         android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"

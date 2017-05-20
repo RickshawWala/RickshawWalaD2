@@ -154,12 +154,13 @@
             android:layout_marginTop="40dp"
             android:background="@color/colorPrimary"
             android:text="Register" />
-        <TextView
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/regd_login_here"
             android:textAlignment="center"
             android:id="@+id/textsignin"
+            android:background="#00FFFFFF"
             android:layout_below="@+id/buttonregister" />
     </LinearLayout>
     </ScrollView>

@@ -6,15 +6,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,12 +25,20 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
+    Double destLat, destLong, originLat, originLong;
+    Double fare;
     private GoogleMap mGoogleMap;
-    private GPSTracker gpsTracker;
-    private Location mLocation;
-    double latitude, longitude;
 
     public MapsFragment () {
         // Required empty public constructor
@@ -39,13 +48,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_maps,container,false);
 
-        gpsTracker = new GPSTracker(getActivity());
-        mLocation = gpsTracker.getLocation();
-
-        if(mLocation!= null){
-            latitude = mLocation.getLatitude();
-            longitude = mLocation.getLongitude();
-        }
+        originLat = getArguments().getDouble("originLat");
+        originLong = getArguments().getDouble("originLong");
+        destLat = getArguments().getDouble("destLat");
+        destLong = getArguments().getDouble("destLong");
+        fare = getArguments().getDouble("fare");
 
         MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -55,28 +62,82 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         buttonFinishRide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PaymentsFragment fragmentOperationPayments = new PaymentsFragment();
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frame_main, fragmentOperationPayments);
-                fragmentTransaction.commit();
+                String id = Helper.getPreference("current_ride_id");
+                try {
+                    Helper.postRideUpdate(id, "payment pending", callback());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         return rootView;
     }
 
+    private Callback callback() {
+        return new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("RideActivity", e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String jsonResponse = response.body().string();
+                    Log.d("JSON", jsonResponse);
+                    try {
+                        JSONObject jsonObject = new JSONObject(jsonResponse);
+                        if (jsonObject.has("success")) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putDouble("fare", fare);
+
+                                    PaymentsFragment fragmentOperationPayments = new PaymentsFragment();
+                                    fragmentOperationPayments.setArguments(bundle);
+                                    android.support.v4.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.frame_main, fragmentOperationPayments);
+                                    fragmentTransaction.commit();
+                                }
+                            });
+                        } else if (jsonObject.has("error")) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getContext(), "Failed to update ride in the api", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Failed to update ride in the api - server error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
 
-        LatLng curLoc = new LatLng(latitude, longitude); //latitude, longitude (of client) received from backend
+        LatLng destination = new LatLng(destLat, destLong); //latitude, longitude (of client) received from backend
         mGoogleMap.addMarker(new MarkerOptions()
-                .position(curLoc)
-                .title("Pick up Location")
-                .draggable(true)
-                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.loc_marker))));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLoc , 18.0f));
+                .position(destination)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+                .title("Destination"));
+
+        LatLng origin = new LatLng(originLat, originLong);
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(origin)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Origin"));
+
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(destination));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destination , 15.0f));
 
     }
 
